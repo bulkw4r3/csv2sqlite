@@ -27,18 +27,24 @@ async def lifespan(app: FastAPI):
     # Hier könnten weitere Aufräumarbeiten erfolgen
 
 # Stellen Sie sicher, dass der Ordner für die Datenbank existiert
-DB_PATH = "data/datensatz.db"
+DB_PATH = "data/zdexport.db"
 
 # Tabellenschema festlegen - passen Sie dies an Ihr eigenes CSV-Schema an
 # Hier ein Beispiel für ein einfaches Schema
-TABLE_NAME = "meine_daten"
+TABLE_NAME = "zendesk_export"
 TABLE_SCHEMA = """
-CREATE TABLE IF NOT EXISTS meine_daten (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    spalte1 TEXT,
-    spalte2 TEXT,
-    spalte3 INTEGER,
-    spalte4 REAL
+CREATE TABLE IF NOT EXISTS zendesk_export (
+    sid INTEGER PRIMARY KEY AUTOINCREMENT,
+    ID INTEGER,
+    Status TEXT,
+    Gruppe TEXT,
+    Mitarbeiter TEXT,
+    Aktualisierungsdatum TEXT,
+    Aktualisiert TEXT,
+    SLA TEXT,
+    Anfragender TEXT,
+    Angefragt TEXT,
+    Routing TEXT
 )
 """
 
@@ -172,14 +178,14 @@ async def upload_csv(file: UploadFile = File(...)):
         for row in csv_reader:
             # WICHTIG: Passen Sie diesen Teil an Ihr CSV-Schema an
             # Hier wird angenommen, dass die CSV 4 Spalten hat, die den Tabellenspalten entsprechen
-            if len(row) != 4:
+            if len(row) != 10:
                 continue  # Überspringe ungültige Zeilen
                 
             # SQLite-Statement vorbereiten
             # WICHTIG: Passen Sie die Spaltenanzahl an Ihr Schema an
             cursor.execute(
-                f"INSERT INTO {TABLE_NAME} (spalte1, spalte2, spalte3, spalte4) VALUES (?, ?, ?, ?)",
-                (row[0], row[1], int(row[2]) if row[2].isdigit() else 0, float(row[3]) if row[3].replace('.', '').isdigit() else 0.0)
+                f"INSERT INTO {TABLE_NAME} (ID, Status, Gruppe, Mitarbeiter, Aktualisierungsdatum, Aktualisiert, SLA, Anfragender, Angefragt, Routing ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (int(row[0]), row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9])
             )
             rows_inserted += 1
         
