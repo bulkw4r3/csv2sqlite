@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "fastapi>=0.115.12",
-    "libsql-experimental>=0.0.41",
+    "libsql-experimental>=0.0.44",
     "python-dotenv>=1.0.1",
     "python-multipart>=0.0.20",
     "uvicorn>=0.34.0",
