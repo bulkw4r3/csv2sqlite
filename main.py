@@ -6,6 +6,8 @@ import sqlite3
 import csv
 import io
 from contextlib import asynccontextmanager
+import libsql_experimental as libsql
+
 
 # Funktion zur Initialisierung der Datenbank
 def init_db():
