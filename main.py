@@ -2,7 +2,6 @@ import os
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
-import sqlite3
 import csv
 import io
 from contextlib import asynccontextmanager
